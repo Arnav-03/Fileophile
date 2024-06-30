@@ -21,6 +21,7 @@ const cookie = Cookie({
 });
 
 function Page() {
+
   
   return (
     <div className="flex bg-[#c5242a] items-center justify-center flex-col h-screen">

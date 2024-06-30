@@ -9,12 +9,12 @@ interface CardsProps {
 
 const Cards: React.FC<CardsProps> = ({ title, description,navigate }) => {
   return (
-    <div className="max-w-sm p-6 border-[2px] m-4 border-[#c5242a] rounded-2xl">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight">{title}</h5>
-      <p className="mb-3 font-normal">{description}</p>
+    <div className="max-w-sm p-6 md:p-10 border-[2px] m-4 md:m-8 border-[#c5242a] rounded-2xl card cursor-pointer">
+      <h5 className="mb-2 text-2xl md:text-4xl font-bold tracking-tight">{title}</h5>
+      <p className="mb-3 text-lg ">{description}</p>
       <Link
         href={navigate}
-        className="inline-flex items-center px-3 py-2 text-sm bg-[#d10000] font-medium text-white rounded-md"
+        className="inline-flex items-center px-3 py-2 text-sm md:text-lg bg-[#d10000] font-medium text-white rounded-md"
       >
         Jump In
         <svg

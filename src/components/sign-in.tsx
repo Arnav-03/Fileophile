@@ -1,4 +1,6 @@
 "use client";
+import User from "@/app/api/models/userModel";
+import axios from "axios";
 import {
   signIn,
   useSession,
@@ -8,24 +10,41 @@ import { useRouter } from "next/navigation";
 import { useEffect, FormEvent, useState } from "react";
 
 export function SignIn() {
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  
+  const senduser=async(user:any)=>{
+    try {
+      console.log("senduser",user)
+      const response = await axios.post("/api/users/signup",user);
+/*       console.log("signup successful",response.message);
+ */
+/*       console.log("signup successful",response.data);
+ */      router.push(`/home`);
+      
+    } catch (error:any) {
+      console.log("signup failed ",error);
+    }finally{
+
+    }
+
+  }
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
-      setName(session.user.name || null);
-      setEmail(session.user.email || null);
-      setUserAvatar(session.user.image || null);
-      console.log("User signed in:", session.user);
-    if (session.user.name) {
-        router.push(`/dashboard?name=${encodeURIComponent(session.user.name)}`);
-      } 
-            router.push(`/dashboard`);
+/*       console.log("User signed in:", session.user);
+ */      const user= {
+        username: session.user.name,
+        email: session.user.email,
+      }
+      senduser(user);
+  
     } else {
-      console.log("Not logged in");
-    }
+/*       console.log("Not logged in");
+ */    }
   }, [session, status]);
 
   const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {

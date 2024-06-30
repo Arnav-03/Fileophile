@@ -57,13 +57,13 @@ function Navigation() {
           {loggedIn ? (
             <div className="flex gap-[30px]">
               {linksafterlogin.map((item, index) => (
-                <li>{item.name}</li>
+                <li key={index}>{item.name}</li>
               ))}
             </div>
           ) : (
             <div className="flex cursor-pointer gap-[30px]">
              {linksbeforelogin.map((item, index) => (
-                <li>{item.name}</li>
+                <li key={index}>{item.name}</li>
               ))}
             </div>
           )}

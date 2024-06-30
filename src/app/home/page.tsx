@@ -19,11 +19,11 @@ export default function page() {
       setName(session.user.name || null);
       setEmail(session.user.email || null);
       setUserAvatar(session.user.image || null);
-      console.log("Dashboad", session.user);
-  
+/*       console.log("home", session.user);
+ */  
     } else {
-      console.log("Not logged in");
-    }
+/*       console.log("Not logged in");
+ */    }
   }, [session, status]);
 
  
@@ -31,7 +31,7 @@ export default function page() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-center ch">
-      <Cards title="Share Files" description=" Easily distribute documents, images, and media by generating shareable links, facilitating efficient collaboration and seamless access for recipients." navigate="/sharelink"/>
+      <Cards title="Share Files" description=" Easily distribute documents, images, and media by generating shareable links, facilitating efficient collaboration and seamless access for recipients." navigate="/sharefile"/>
       <Cards title="Collaboration" description="A shared environment where multiple users can collectively manage and access files, promoting seamless collaboration, organization, and productivity." navigate="/collaboration"/>
       </div>
     </div>
