@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import menu from "../../public/menu.png";
-import cross from "../../public/cross.png";
+import menu from "../../public/menuw.png";
+import cross from "../../public/crossw.png";
 
 import { Cookie, Archivo_Black } from "next/font/google";
 import { useState } from "react";
@@ -19,7 +19,7 @@ const linksbeforelogin = [
 
 const linksafterlogin = [
   { name: "Share Files", link: "/share" },
-  { name: "Repository", link: "/repository" },
+  { name: "Collaboration", link: "/Collaboration" },
   { name: "Profile", link: "/profile" },
   { name: "Settings", link: "/settings" },
 ];
@@ -34,7 +34,7 @@ const LinkList: React.FC<LinkListProps> = ({ links }) => (
   <ul className="w-full text-center">
     {links.map((item, index) => (
       <li
-        className="border-b-[1px] text-xl border-[#dfdddd] m-2 p-3 px-5 cursor-pointer"
+        className="border-b-[1px] text-xl text-black border-[#dfdddd] m-2 p-3 px-5 cursor-pointer"
         key={index}
       >
         {item.name}
@@ -45,11 +45,11 @@ const LinkList: React.FC<LinkListProps> = ({ links }) => (
 
 function Navigation() {
   const [menuopen, setMenuopen] = useState(false);
-  const [loggedIn, setloggedIn] = useState(false);
+  const [loggedIn, setloggedIn] = useState(true);
 
   return (
-    <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-white z-10 ">
-      <div className={`${cookie.className} text-[#000000] text-5xl h-[50px] ml-2`}>
+    <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-[#d10000] text-white z-10 ">
+      <div className={`${cookie.className}  text-5xl h-[50px] ml-2`}>
         Fileophile
       </div>
       <div className=" hidden md:flex">
@@ -61,13 +61,10 @@ function Navigation() {
               ))}
             </div>
           ) : (
-            <div className="flex gap-[30px]">
-              <li className="text-[#c5242a] rounded-3xl p-2 border-[#c5242a] border-2 cursor-pointer">
-                Sign up
-              </li>
-              <li className="bg-[#c5242a] rounded-md p-2 text-white px-4">
-                Login
-              </li>
+            <div className="flex cursor-pointer gap-[30px]">
+             {linksbeforelogin.map((item, index) => (
+                <li>{item.name}</li>
+              ))}
             </div>
           )}
         </ul>

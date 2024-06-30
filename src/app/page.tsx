@@ -1,28 +1,39 @@
 import Image from "next/image";
-import { Inter  , Cookie , Archivo_Black} from "next/font/google";
+import { Inter, Cookie, Archivo_Black } from "next/font/google";
+import Link from "next/link";
+import Navigation from "@/components/Navigation";
+import { SignIn } from "@/components/sign-in";
 
 const cookie = Cookie({
   subsets: ["latin"],
-  weight: ["400"], 
+  weight: ["400"],
 });
 const archivoblack = Archivo_Black({
   subsets: ["latin"],
-  weight: ["400"], 
+  weight: ["400"],
 });
 export default function Home() {
   return (
-  <div className="flex flex-col mt-[67px]     ">
+    <div className="">
+      <Navigation />
+      <div className="flex flex-col mt-[66px]   h-fit ">
+        <div className="bg-[#d10000] flex flex-col p-4  items-center h-2/3">
+          <div
+            className={`${archivoblack.className} m-2   text-[#ffffff] uppercase text-3xl  md:text-5xl md:w-2/3 text-left `}
+          >
+            The easiest <br></br>way to <br></br> 
+            <span className={`${cookie.className} glow capitalize  text-[#ffffff]  text-7xl  md:text-9xl md:w-2/3 text-left `}>share files</span> 
+            <br></br>and create <br></br>
+            <span className="text-white ">collaborative <br></br>workspaces</span> 
+          </div>
     
-    <div className="wave h-[800px]  bg-[#c5242a] ">
-    <div className={`${archivoblack.className} m-4  text-[#e2b5b5] uppercase text-3xl  text-center `}>
-    The easiest way to share files and create collaborative workspaces
+          <Link href="/login">
+            <div className="bg-[#ffffff]  text-[#d10000] p-2 py-3 m-4 cursor-pointer uppercase rounded font-bold text-lg">
+              get started
+            </div>
+          </Link>
+        </div>
+      </div>
     </div>
-
-    <div className="bg-[#e7dada] text-[#be1a1a] p-2 py-3 m-4 cursor-pointer  uppercase rounded font-bold text-lg  ">
-      get started
-    </div>
-    </div>
-   
-  </div>
   );
 }
