@@ -1,11 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&display=swap');
 .card {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+}
+.lil {
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .card:hover {
@@ -48,8 +54,23 @@
   }
   
   
+/*   *::-webkit-scrollbar {
+    width: 4px;
+  }
   
+  *::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 10px;
+  }
   
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(116, 8, 8);
+    border-radius: 14px;
+    border: 1px solid var(--primary);
+  }
+  
+ 
+   */
   
   
   
