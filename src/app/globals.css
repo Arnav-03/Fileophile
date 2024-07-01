@@ -52,25 +52,30 @@
       cursor: not-allowed;
     }
   }
+  .josefin {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+  }
   
-  
-/*   *::-webkit-scrollbar {
-    width: 4px;
+ *::-webkit-scrollbar {
+    width: 5px;
   }
   
   *::-webkit-scrollbar-track {
-    background: white;
+    background: transparent;
     border-radius: 10px;
   }
   
   *::-webkit-scrollbar-thumb {
-    background-color: rgb(116, 8, 8);
+    background-color: rgb(223, 23, 23);
     border-radius: 14px;
     border: 1px solid var(--primary);
   }
   
  
-   */
+
   
   
   
