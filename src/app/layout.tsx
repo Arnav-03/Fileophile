@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper";
 import Favicon from "../../public/favicon.ico";
 import { UserProvider } from "@/context/userContext";
+import { FileProvider } from "@/context/fileContext";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -28,6 +29,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Playwrite+ES+Deco:wght@100..400&display=swap"
           rel="stylesheet"
         />
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+        </link>
         <link
           href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap"
           rel="stylesheet"
@@ -36,10 +39,16 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
           rel="stylesheet"
         ></link>
+        <link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet">
+        </link>
       </head>
       <body className={`${inter.className} `}>
         <SessionWrapper>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+          <FileProvider>
+          {children}
+          </FileProvider>
+          </UserProvider>
         </SessionWrapper>
       </body>
     </html>

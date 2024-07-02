@@ -60,6 +60,7 @@ export default function Upload() {
   
     // Generate folder link based on userlink, files length, and timestamp
     const folderlink = `${userlink}_${files.length}_${Date.now()}`;
+    setfolderlink(folderlink)
   
     const initialProgress = new Array(files.length).fill(0);
     setProgress(initialProgress);
@@ -161,10 +162,11 @@ export default function Upload() {
 
       useEffect(() => {
         if (overallProgress === 100) {
-        
+          console.log(folderlink)
+
           setTimeout(() => {
-/*             router.push(`/f/${folderlink}`);
- */          }, 3000);
+            router.push(`/preview/${user?.email}/${folderlink}`);
+          }, 3000);
         }
       }, [overallProgress]);
 

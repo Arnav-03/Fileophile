@@ -8,6 +8,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
+.zeyada {
+  font-family: "Zeyada", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.comfortaa {
+  font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .lil {
   font-family: "Lilita One", sans-serif;
   font-weight: 400;
@@ -62,7 +74,7 @@
  *::-webkit-scrollbar {
     width: 5px;
   }
-  
+
   *::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 10px;
@@ -75,7 +87,23 @@
   }
   
  
+/* Scrollbar styles for smaller screens */
+@media (max-width: 400px) {
+  *::-webkit-scrollbar {
+    height: 3px;
+  }
 
+  *::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(223, 23, 23);
+    border-radius: 14px;
+    border: 1px solid var(--primary);
+  }
+}
   
   
   
