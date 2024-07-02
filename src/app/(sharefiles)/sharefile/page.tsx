@@ -2,6 +2,7 @@
 import React from "react";
 import Dropbox from "../components/Dropbox";
 import FilePreviews from "../components/FilePreviews";
+import Upload from "../components/Upload";
 
 function page() {
   return (
@@ -14,6 +15,8 @@ function page() {
           <Dropbox />
         </div>
       </div>
+      <Upload/>
+
     </div>
   );
 }

@@ -60,7 +60,7 @@ function FilePreviews() {
 
   return (
     <div
-      className={`border-4 rounded-xl border-[#c9bcbc] h-[320px] m-2 flex items-center flex-col`}
+      className={`border-4 rounded-xl border-[#c9bcbc] h-[370px] m-2 flex items-center flex-col`}
     >
       <div className="text-3xl border-b-4 border-[#c9bcbc] text-center josefin uppercase tracking-[10px] p-2 w-full">
         Files
@@ -75,18 +75,21 @@ function FilePreviews() {
             return (
               <li
                 key={id}
-                className="flex items-center justify-between border-2 w-full text-lg"
-              >
-                <Image
+                className="flex items-center justify-between border-b-2 border-[#e9e6e6] w-full text-lg mt-2 py-1"
+              > 
+              <div className="flex items-center gap-2">
+              <Image
                   className="ml-2"
                   height={50}
                   src={getFileIcon(file.name)}
                   alt="icon"
                 />
-                <div className="ml-[-10px]"> {trimmedName}</div>
+                <div className=""> {trimmedName}</div>
+              </div>
+              
                 <div
                   onClick={() => handleRemoveFile(id)}
-                  className="ml-2 cursor-pointer"
+                  className=" cursor-pointer"
                 >
                   <Image height={40} src={deletefile} alt="delete" />
                 </div>

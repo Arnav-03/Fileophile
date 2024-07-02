@@ -20,19 +20,34 @@ function Dropbox() {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5 MB in bytes
+
+    
+    let errorMessage = "";
     files.forEach((file) => {
-      console.log(file);
-      addFile(file);
+      if (file.size > maxSizeInBytes) {
+        errorMessage = "File size exceeds 5 MB";
+      } else {
+        addFile(file);
+      }
     });
+
+    setError(errorMessage);
   };
 
   const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     const files = Array.from(event.dataTransfer.files);
+    let errorMessage = "";
     files.forEach((file) => {
-      console.log(file);
-      addFile(file);
+      if (file.size > 5 * 1024 * 1024) {
+        errorMessage = "File size exceeds 5 MB";
+      } else {
+        addFile(file);
+      }
     });
+
+    setError(errorMessage);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
@@ -64,10 +79,12 @@ function Dropbox() {
             />
           </svg>
           <p className="mb-2 text-md lg:text-xl text-red-600">
-            <span className="font-extrabold">Click to upload</span> or drag and drop
+            <span className="font-extrabold">Click to upload</span> or drag and
+            drop
           </p>
         </div>
         <input
+        onClick={()=>console.log("clicked")}
           onChange={handleFileChange}
           id="dropzone-file"
           type="file"
