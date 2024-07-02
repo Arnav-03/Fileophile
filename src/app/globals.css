@@ -90,7 +90,8 @@
 /* Scrollbar styles for smaller screens */
 @media (max-width: 400px) {
   *::-webkit-scrollbar {
-    height: 3px;
+    height: 1px;
+    width: 1px;
   }
 
   *::-webkit-scrollbar-track {

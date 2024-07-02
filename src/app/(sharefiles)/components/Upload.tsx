@@ -165,7 +165,7 @@ export default function Upload() {
           console.log(folderlink)
 
           setTimeout(() => {
-            router.push(`/preview/${user?.email}/${folderlink}`);
+            router.push(`/preview?user=${userlink}&folder=${folderlink}`);
           }, 3000);
         }
       }, [overallProgress]);
