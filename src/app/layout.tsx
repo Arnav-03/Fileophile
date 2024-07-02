@@ -3,6 +3,7 @@ import { Inter, Cookie } from "next/font/google";
 import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper";
 import Favicon from "../../public/favicon.ico";
+import { UserProvider } from "@/context/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -31,11 +32,15 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap"
           rel="stylesheet"
         />
-        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet"
+        <link
+          href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+          rel="stylesheet"
         ></link>
       </head>
       <body className={`${inter.className} `}>
-        <SessionWrapper>{children}</SessionWrapper>
+        <SessionWrapper>
+          <UserProvider>{children}</UserProvider>
+        </SessionWrapper>
       </body>
     </html>
   );

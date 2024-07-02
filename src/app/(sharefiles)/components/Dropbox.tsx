@@ -84,7 +84,6 @@ function Dropbox() {
           </p>
         </div>
         <input
-        onClick={()=>console.log("clicked")}
           onChange={handleFileChange}
           id="dropzone-file"
           type="file"

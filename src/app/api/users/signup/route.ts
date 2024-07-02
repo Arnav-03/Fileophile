@@ -8,7 +8,7 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
-        const { username, email } = reqBody;
+        const { username, email,image } = reqBody;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
