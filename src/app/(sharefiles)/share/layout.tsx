@@ -17,23 +17,25 @@ export default function Layout({ children }: LayoutProps) {
   const [folder, setFolder] = useState<string>("");
 
   useEffect(() => {
-  const userParam = searchParams.get('user');
-  const folderParam = searchParams.get('folder');
-
-  if (userParam !== null) {
+    const userParam = searchParams.get("user");
+    const folderParam = searchParams.get("folder");
+    const passwordparam = searchParams.get("password");
+    if (userParam !== null) {
       setUser(userParam);
-  }
-  if (folderParam !== null) {
-      setFolder(folderParam);
-  }
-  }, [searchParams]);
 
+    }
+    if (folderParam !== null) {
+      setFolder(folderParam);
+
+    }
+    
+  }, [searchParams]);
   return (
     <div className="h-fit">
       <Navigation />
       <main className="mt-[66px] flex-col ch flex items-center ch ">
-        <div className="zeyada text-5xl m-4 mt-10 mb-0  ">Files Shared with You</div>
-       <div className="m-4">From: {useremail}</div>
+        <div className="zeyada text-5xl m-4 mt-10 mb-0 text-center ">Files Shared with You</div>
+       <div className="m-4 mb-2">From: <span className="comfortaa"> {useremail}</span></div>
         <div className="flex items-center gap-2 w-full h-full justify-center">
           <div className=" h-full  ">
             <FileProvider>

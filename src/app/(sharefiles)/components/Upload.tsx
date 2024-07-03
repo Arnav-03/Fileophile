@@ -12,7 +12,10 @@ import { getFirestore } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/userContext";
-
+import eyeopen from "../../../../public/eyeopen.png";
+import eyeclosed from "../../../../public/eyeclosed.png";
+import Image from "next/image";
+import { link } from "fs";
 export default function Upload() {
   const { files } = useFileContext();
   const { user } = useUserContext();
@@ -24,7 +27,7 @@ export default function Upload() {
   const [showupload, setshowupload] = useState<boolean>(true);
   const [clickedupload, setclickupload] = useState<boolean>(false);
   const router = useRouter();
-  const uploadTasksRef = useRef<any[]>([]); 
+  const uploadTasksRef = useRef<any[]>([]);
   const [userlink, setuserlink] = useState<string | null>(null);
   const [folderlink, setfolderlink] = useState<string>("");
   const [uploadfinished, setuploadfinished] = useState<boolean>(true);
@@ -39,7 +42,6 @@ export default function Upload() {
       setuserlink("");
     }
   }, [user]);
-  
 
   const uploadFiles = () => {
     if (userlink?.length === 0) {
@@ -50,21 +52,21 @@ export default function Upload() {
       console.log("Choose files first");
       return;
     }
-  
+
     setclickupload(true);
     setshowupload(false);
     if (files.length > 5) {
       console.log("Too many files");
       return;
     }
-  
+
     // Generate folder link based on userlink, files length, and timestamp
     const folderlink = `${userlink}_${files.length}_${Date.now()}`;
-    setfolderlink(folderlink)
-  
+    setfolderlink(folderlink);
+
     const initialProgress = new Array(files.length).fill(0);
     setProgress(initialProgress);
-  
+
     files.forEach((item, index) => {
       const metadata = {
         contentType: item.file.type,
@@ -75,13 +77,13 @@ export default function Upload() {
       );
       const uploadTask = uploadBytesResumable(storageRef, item.file, metadata);
       uploadTasksRef.current.push({ uploadTask, storageRef });
-  
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const fileProgress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  
+
           setProgress((prevProgress) => {
             const newProgress = [...prevProgress];
             newProgress[index] = fileProgress;
@@ -122,9 +124,13 @@ export default function Upload() {
       );
     });
   };
-  
 
-  const saveInfo = async (name: string, file: File, fileUrl: string , folderlink: string) => {
+  const saveInfo = async (
+    name: string,
+    file: File,
+    fileUrl: string,
+    folderlink: string
+  ) => {
     const docId = Date.now().toString();
     setDocidstore(docId);
     await setDoc(doc(db, `fileophile/${name}/${folderlink}`, docId), {
@@ -134,10 +140,10 @@ export default function Upload() {
       fileUrl: fileUrl,
       shortUrl: process.env.NEXT_PUBLIC_BASE_URL + name + docId,
     }).then((resp) => {
-/*       console.log("doc saved");
- */    });
+      /*       console.log("doc saved");
+       */
+    });
   };
-
 
   const stopUploads = () => {
     setshowupload(true);
@@ -160,26 +166,84 @@ export default function Upload() {
       ? progress.reduce((sum, current) => sum + current, 0) / progress.length
       : 0;
 
-      useEffect(() => {
-        if (overallProgress === 100) {
-          console.log(folderlink)
-
-          setTimeout(() => {
-            router.push(`/preview?user=${userlink}&folder=${folderlink}`);
-          }, 3000);
+  const saveInfopassword = async (filelink: string, password: string) => {
+    const docId = filelink;
+    await setDoc(doc(db, `password-protected-links`, docId), {
+      password: password,
+    }).then((resp) => {
+/*       console.log("pass doc saved");
+ */    });
+  };
+  useEffect(() => {
+    if (overallProgress === 100) {
+      if (confirmpassword) {
+        if (password) {
+          saveInfopassword(`user=${userlink}&folder=${folderlink}`, password);
         }
-      }, [overallProgress]);
+      }
+      setTimeout(() => {
+        router.push(`/preview?user=${userlink}&folder=${folderlink}`);
+      }, 3000);
+    }
+  }, [overallProgress]);
 
+  const [password, setpassword] = useState("");
+  const [showpassword, setshowpassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setshowpassword(!showpassword);
+  };
+  const [confirmpassword, setConfirmpassword] = useState(false);
+
+ 
   return (
-  
-    <div className="flex flex-col items-center w-full p-4 text-[#ffffff] relative">
+    <div
+      className={` flex flex-col items-center w-full p-4 text-[#ffffff] relative ${
+        files.length === 0 ? "hidden" : ""
+      }`}
+    >
       <div
-        onClick={uploadFiles}
-        className={` bg-[#bb0b14] p-3 rounded cursor-pointer mb-4 z-10 ${
+        className={`${
           showupload ? "" : "hidden"
-        }`}
+        } flex flex-col items-center justify-center text-center`}
       >
-        Upload
+        <div
+          onClick={uploadFiles}
+          className={` bg-[#ce0202] p-3 mt-[-10px] rounded cursor-pointer  w-fit  z-10 ${
+            showupload ? "" : "hidden"
+          }`}
+        >
+          Upload
+        </div>
+        <div className="flex flex-col items-center justify-center ">
+          <div className="flex p-2 border-black border-2 text-md justify-between rounded-lg m-1 max-w-[200px]">
+            <input
+              className="text-black   outline-none  overflow-hidden "
+              onChange={(e) => setpassword(e.target.value)}
+              type={`${showpassword ? "text" : "password"}`}
+              placeholder="password (optional)"
+              name="password"
+              id="password"
+            />
+            <Image
+              className=""
+              onClick={togglePasswordVisibility}
+              src={showpassword ? eyeclosed : eyeopen}
+              height={25}
+              alt="Password visibility toggle"
+            />
+          </div>
+
+          <div
+            onClick={() => setConfirmpassword((prev) => !prev)}
+            className={`"text-white text-sm ${
+              !confirmpassword ? "bg-blue-500" : "bg-red-600"
+            } w-fit p-2 rounded capitalize cursor-pointer ${
+              password.length > 0 ? "" : "opacity-0"
+            }`}
+          >
+            {confirmpassword ? "remove password" : "set password"}
+          </div>
+        </div>
       </div>
 
       <div

@@ -57,6 +57,7 @@ function FilePreviews() {
   function handleRemoveFile(id: string): void {
     removeFile(id);
   }
+  
 
   return (
     <div
