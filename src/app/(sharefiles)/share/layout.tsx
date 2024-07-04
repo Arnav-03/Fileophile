@@ -5,13 +5,14 @@ import { FileProvider } from "@/context/fileContext";
 import { useUserContext } from "@/context/userContext";
 import Image from "next/image";
 import copy from "../../../../public/copy.png";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  
   const searchParams = useSearchParams();
   const [useremail, setUser] = useState<string>("");
   const [folder, setFolder] = useState<string>("");
@@ -19,7 +20,6 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     const userParam = searchParams.get("user");
     const folderParam = searchParams.get("folder");
-    const passwordparam = searchParams.get("password");
     if (userParam !== null) {
       setUser(userParam);
 
@@ -30,6 +30,9 @@ export default function Layout({ children }: LayoutProps) {
     }
     
   }, [searchParams]);
+
+  
+
   return (
     <div className="h-fit">
       <Navigation />

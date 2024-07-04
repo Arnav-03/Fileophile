@@ -25,6 +25,7 @@ import { Cookie } from "next/font/google";
 import { useSearchParams } from "next/navigation";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import Loading from "@/app/loading";
 
 const cookie = Cookie({
   subsets: ["latin"],
@@ -44,6 +45,10 @@ function Page() {
   const [folder, setFolder] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [showfiles, setshowfiles] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState(true);
+
+
 
   useEffect(() => {
     const userParam = searchParams.get("user");
@@ -139,10 +144,12 @@ function Page() {
   };
 
   useEffect(() => {
+
     if (user && folder) {
       getpasswordFromFirestore();
       setTimeout(() => {
         getDocumentsFromFirebase();
+        setLoading(false);
       }, 1000);
     }
   }, [user, folder]);
@@ -175,7 +182,7 @@ function Page() {
     try {
       await Promise.all(filePromises);
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, "files.zip");
+      saveAs(content, `fileophile-${user}-${folder}.zip`);
     } catch (error) {
       console.error("Error creating zip file:", error);
     }
@@ -219,6 +226,14 @@ function Page() {
   }
 
   const [error, seterror] = useState("")
+  if (loading) {
+    return  <div
+    className={`${cookie.className} text-4xl flex  m-4 p-4 items-center justify-between`}
+  >
+    Loading...
+  </div>;
+  }
+
   return (
     <div className=" flex items-center justify-center flex-col">
       {showfiles && (

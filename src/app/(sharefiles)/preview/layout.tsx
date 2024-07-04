@@ -7,18 +7,30 @@ import Image from "next/image";
 import copy from "../../../../public/copy.png";
 import tick from "../../../../public/tick2.png";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Loading from "@/app/loading";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const {user}= useUserContext();
+  const router= useRouter();
+  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const [useremail, setUser] = useState<string>("");
   const [folder, setFolder] = useState<string>("");
   const [password, setpassword] = useState<string>("");
   const [showfiles, setShowfiles] = useState(false);
+  
+  useEffect(() => {
+      if (user) {
+        setLoading(false);
+      }
+    }, [user]);
+
+  
   useEffect(() => {
     const userParam = searchParams.get("user");
     const folderParam = searchParams.get("folder");
@@ -31,9 +43,16 @@ export default function Layout({ children }: LayoutProps) {
     }
     
   }, [searchParams]);
-
+ 
+  
+  
+  const [copied, setCopied] = useState(false)
   const baselink = process.env.NEXT_PUBLIC_BASE_URL;
   const link = `${baselink}share?user=${useremail}&folder=${folder}`;
+
+  if (loading) {
+    return <div><Loading/></div>;
+  }
   return (
     <div className="h-fit">
       <Navigation />
@@ -43,10 +62,11 @@ export default function Layout({ children }: LayoutProps) {
           Now you can copy the link below to share your files
         </div>
         <div className="flex items-center gap-2">
-          Copy link
+          {copied?"Copied":"Copy Link"}
           <Image
             onClick={() => {
               navigator.clipboard.writeText(link);
+              setCopied(true);
             }}
             className="cursor-pointer"
             src={copy}

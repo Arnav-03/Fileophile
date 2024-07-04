@@ -1,28 +1,52 @@
-"use client"
+"use client";
 import { Metadata } from "next";
 import { Cookie } from "next/font/google";
 import Link from "next/link";
-import React from "react";
-import { signIn } from "@/auth"
+import React, { useState } from "react";
+import { signIn } from "@/auth";
 import { SignIn } from "@/components/sign-in";
-import {  useSession,signOut as nextAuthSignOut } from "next-auth/react";
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 import { useEffect } from "react";
 import { FormEvent } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/userContext";
+import { cookies } from "next/headers";
 
-const metadata: Metadata = {
-  title: "Sign up | Fileophile",
-  description:
-    "The easiest way to share files and create collaborative workspaces",
-};
-
-const cookie = Cookie({
+export const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
 
 function Page() {
+  const router = useRouter();
+  const { setUser, user } = useUserContext();
+  useEffect(() => {
+    if (user) {
+      router.push("/home");
+    }
+  }, [user]);
 
-  
+  const [usercredentials, setuser] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+  const saveToContextAndCookie = (email: string, username: string) => {
+    const user = { email, username };
+    setUser(user);
+  };
+  const onsignup = async () => {
+    try {
+      saveToContextAndCookie(usercredentials.email, usercredentials.username);
+      const response = await axios.post("/api/users/signup", usercredentials);
+      console.log("signup successful", response.data);
+      router.push("/login");
+    } catch (error: any) {
+      console.log("signup failed ", error);
+    }
+  };
+
   return (
     <div className="flex bg-[#c5242a] items-center justify-center flex-col h-screen">
       <div className={`${cookie.className} text-white text-8xl `}>
@@ -35,13 +59,17 @@ function Page() {
               <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl ">
                 Create an account
               </h1>
-              <div className="space-y-4 md:space-y-6  "  >
+              <div className="space-y-4 md:space-y-6">
                 <div>
                   <input
-                    type="name"
-                    name="name"
-                    id="name"
-                    className=" border   text-sm rounded   block w-full p-2.5 text-black   outline-none "
+                    type="text"
+                    name="username"
+                    value={usercredentials.username}
+                    onChange={(e) =>
+                      setuser({ ...usercredentials, username: e.target.value })
+                    }
+                    id="username"
+                    className="border text-sm rounded block w-full p-2.5 text-black outline-none"
                     placeholder="Username"
                   />
                 </div>
@@ -50,35 +78,43 @@ function Page() {
                     type="email"
                     name="email"
                     id="email"
-                    className=" border text-black  text-sm rounded  block w-full p-2.5  outline-none   "
+                    value={usercredentials.email}
+                    onChange={(e) =>
+                      setuser({ ...usercredentials, email: e.target.value })
+                    }
+                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
                     placeholder="Email"
                   />
                 </div>
                 <div>
                   <input
+                    value={usercredentials.password}
+                    onChange={(e) =>
+                      setuser({ ...usercredentials, password: e.target.value })
+                    }
                     type="password"
                     name="password"
                     id="password"
                     placeholder="Password"
-                    className=" border text-black  text-sm rounded   block w-full p-2.5   outline-none "
+                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
                   />
                 </div>
 
                 <button
-                  type="submit"
-                  className="bg-[#610404] w-full text-[#ffffff] font-medium rounded text-lg px-5 py-2 text-center "
+                  onClick={onsignup}
+                  className="bg-[#610404] w-full text-[#ffffff] font-medium rounded text-lg px-5 py-2 text-center"
                 >
                   Sign Up
                 </button>
-                
-                <SignIn/>
+              </div>
 
-                <div className="flex text-sm justify-center gap-2 w-full">
-                  <div className="font-light  ">Already have an account?</div>
-                  <Link href="/login">
-                    <div className="font-medium  hover:underline ">Login</div>
-                  </Link>
-                </div>
+              <SignIn />
+
+              <div className="flex text-sm justify-center gap-2 w-full">
+                <div className="font-light">Already have an account?</div>
+                <Link href="/login">
+                  <div className="font-medium hover:underline">Login</div>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,10 +1,11 @@
 "use client"
+import axios from 'axios';
+import router from 'next/navigation';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface User {
   username: string;
   email: string;
-  imageAvatar: string; // Assuming image is stored as URL or base64 string
 }
 
 interface UserContextProps {
@@ -18,8 +19,22 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(initialUser);
+  const checkcookies = async () => {
+    try {
+      const response = await axios.post("/api/users/checkcookies");
+      setUser(response.data);
+    } catch (error: any) {
+      console.log("signup failed ", error);
+    } finally {
+    }
+  };
   useEffect(() => {
-  console.log(user)
+    checkcookies();
+  }, [])
+  useEffect(() => {
+    if(user!==null){
+      console.log(user)
+    }
   }, [user])
   
   return (

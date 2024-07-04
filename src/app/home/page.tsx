@@ -7,27 +7,18 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, FormEvent, useState } from "react";
 import Cards from "./components/Cards";
-
+import { useUserContext } from "@/context/userContext";
 export default function page() {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const [name, setName] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const {user} =useUserContext();
   useEffect(() => {
-    if (status === "authenticated" && session?.user) {
-      setName(session.user.name || null);
-      setEmail(session.user.email || null);
-      setUserAvatar(session.user.image || null);
-/*       console.log("home", session.user);
- */  
-    } else {
-/*       console.log("Not logged in");
- */    }
-  }, [session, status]);
-
- 
-
+    if(!user){
+      router.push('/login');
+    }
+  }, [user])
+  
+  const { data: session, status } = useSession();
+  
   return (
     <div>
       <div className="flex flex-wrap items-center justify-center ch">

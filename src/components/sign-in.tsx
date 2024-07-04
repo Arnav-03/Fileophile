@@ -29,24 +29,26 @@ export function SignIn() {
     } finally {
     }
   };
-  useEffect(() => {
+
+/*   useEffect(() => {
     if (status === "authenticated" && session?.user) {
       const user = {
         username: session.user.name ?? "",
         email: session.user.email ?? "",
         imageAvatar: session.user.image ?? "",
       };
+      console.log(user)
       setUser(user);
-      senduser(user);
+      senduser(user); 
     } else {
-      /*       console.log("Not logged in");
-       */
+      
     }
-  }, [session, status]);
+  }, [session, status]); */
 
   const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await signIn("google");
+  
   };
 
   const handleSignOut = async () => {
