@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/userContext";
 import { cookies } from "next/headers";
 
-export const cookie = Cookie({
+const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
