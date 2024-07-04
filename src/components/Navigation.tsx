@@ -5,23 +5,23 @@ import cross from "../../public/crossw.png";
 
 import { Cookie, Archivo_Black } from "next/font/google";
 import { useState } from "react";
+import {useRouter} from "next/navigation";
 
 // Call and assign font loaders to a const at the module scope
 const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
-
 const linksbeforelogin = [
   { name: "Sign up", link: "/signup" },
   { name: "Login", link: "/login" },
 ];
 
 const linksafterlogin = [
-  { name: "Share Files", link: "/share" },
-  { name: "Collaboration", link: "/Collaboration" },
+  { name: "Share Files", link: "/sharefile" },
+  { name: "Collaboration", link: "/collaboration" },
   { name: "Profile", link: "/profile" },
-  { name: "Settings", link: "/settings" },
+  { name: "logout", link: "/logout" },
 ];
 type LinkItem = {
   name: string;
@@ -30,20 +30,23 @@ type LinkItem = {
 type LinkListProps = {
   links: LinkItem[];
 };
-const LinkList: React.FC<LinkListProps> = ({ links }) => (
-  <ul className="w-full text-center">
-    {links.map((item, index) => (
-      <li
-        className="border-b-[1px] text-xl text-black border-[#dfdddd] m-2 p-3 px-5 cursor-pointer"
-        key={index}
-      >
-        {item.name}
-      </li>
-    ))}
-  </ul>
-);
+
 
 function Navigation() {
+  const router =useRouter();
+
+  const LinkList: React.FC<LinkListProps> = ({ links }) => (
+    <ul className="w-full text-center">
+      {links.map((item, index) => (
+        <li onClick={()=>router.push(item.link)}
+          className="border-b-[1px] text-xl text-black border-[#dfdddd] m-2 p-3 px-5 cursor-pointer"
+          key={index}
+        >
+          {item.name}
+        </li>
+      ))}
+    </ul>
+  );
   const [menuopen, setMenuopen] = useState(false);
   const [loggedIn, setloggedIn] = useState(true);
 
@@ -57,7 +60,7 @@ function Navigation() {
           {loggedIn ? (
             <div className="flex gap-[30px]">
               {linksafterlogin.map((item, index) => (
-                <li key={index}>{item.name}</li>
+                <li onClick={()=>router.push(item.link)} key={index}>{item.name}</li>
               ))}
             </div>
           ) : (

@@ -1,7 +1,13 @@
-"use client"
-import axios from 'axios';
-import router from 'next/navigation';
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+"use client";
+import axios from "axios";
+import router from "next/navigation";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface User {
   username: string;
@@ -22,21 +28,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const checkcookies = async () => {
     try {
       const response = await axios.post("/api/users/checkcookies");
-      setUser(response.data);
+      if (response.data) {
+        setUser(response.data);
+      }
     } catch (error: any) {
-      console.log("signup failed ", error);
-    } finally {
+/*       console.log("");
+ */    } finally {
     }
   };
   useEffect(() => {
     checkcookies();
-  }, [])
+  }, []);
   useEffect(() => {
-    if(user!==null){
-      console.log(user)
-    }
-  }, [user])
-  
+    if (user !== null) {
+/*       console.log(user);
+ */    }
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
@@ -47,7 +55,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 export const useUserContext = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUserContext must be used within a UserProvider');
+    throw new Error("useUserContext must be used within a UserProvider");
   }
   return context;
 };

@@ -43,10 +43,13 @@ function Page() {
     try {
       console.log("clicked");
       const response = await axios.post("/api/users/login", usercredentials);
-      console.log("login successful", response.data);
+      console.log(response.data.message);
+      if(response.data.user){
+        setUser(response.data.user);
+      }
       router.push("/home");
     } catch (error: any) {
-      console.log("signup failed ", error);
+      console.log("login failed ", error);
     } finally {
     }
   };

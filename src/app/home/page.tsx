@@ -8,17 +8,23 @@ import { useRouter } from "next/navigation";
 import { useEffect, FormEvent, useState } from "react";
 import Cards from "./components/Cards";
 import { useUserContext } from "@/context/userContext";
+import Loading from "../loading";
 export default function page() {
   const router = useRouter();
   const {user} =useUserContext();
+
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
-    if(!user){
-      router.push('/login');
+    if (user) {
+      setLoading(false);
     }
-  }, [user])
-  
+  }, [user]);
+
   const { data: session, status } = useSession();
-  
+  if (loading) {
+    return <div><Loading/></div>;
+  }
   return (
     <div>
       <div className="flex flex-wrap items-center justify-center ch">

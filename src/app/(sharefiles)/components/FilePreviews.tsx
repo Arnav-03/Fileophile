@@ -102,7 +102,7 @@ function FilePreviews() {
       <div className="flex flex-col p-2 m-2">
         {files.length === 0 && (
           <div className="text-4xl mt-[50px] text-center lil text-[#db2525] h-full">
-            You haven't added <br /> any files yet.
+            You havent&apos;t added <br /> any files yet.
           </div>
         )}
       </div>
