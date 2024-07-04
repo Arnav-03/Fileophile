@@ -17,11 +17,11 @@ export default function NotFound() {
             </h1>
             <p className={`${cookie.className} mb-4 text-6xl  tracking-tight font-bold   `}
             >
-              Something's missing.
+              Something&apos;s missing.
             </p>
             <p className="mb-4 text-lg font-light 0">
-              Sorry, we can't find that page. You'll find lots to explore on the
-              home page.{" "}
+              Sorry, we can&apos;t find that page. You&apos;ll find lots to explore on the
+              home page.
             </p>
             <Link href="/">
               <div className="inline-flex font-medium rounded-lg text-sm px-5 py-2.5 text-center  my-4 bg-[#ffe8e8] text-black">

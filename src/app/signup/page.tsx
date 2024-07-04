@@ -1,17 +1,12 @@
 "use client";
-import { Metadata } from "next";
 import { Cookie } from "next/font/google";
 import Link from "next/link";
 import React, { useState } from "react";
-import { signIn } from "@/auth";
 import { SignIn } from "@/components/sign-in";
-import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 import { useEffect } from "react";
-import { FormEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/userContext";
-import { cookies } from "next/headers";
 
 const cookie = Cookie({
   subsets: ["latin"],

@@ -4,7 +4,7 @@ import Dropbox from "../components/Dropbox";
 import FilePreviews from "../components/FilePreviews";
 import Upload from "../components/Upload";
 
-function page() {
+function Page() {
   return (
     <div className="flex flex-col ch w-full items-center">
       <div className="flex   flex-col-reverse lg:flex-row w-full items-center justify-center">
@@ -21,4 +21,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

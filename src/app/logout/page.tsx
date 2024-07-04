@@ -3,14 +3,13 @@ import { useUserContext } from "@/context/userContext";
 import axios from "axios";
 import { Cookie } from "next/font/google";
 import { useRouter } from "next/navigation";
-import router from "next/navigation";
 
 const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
 
-function page() {
+function Page() {
   const { setUser } = useUserContext();
 const router= useRouter();
   setUser(null);
@@ -36,4 +35,4 @@ const router= useRouter();
   );
 }
 
-export default page;
+export default Page;

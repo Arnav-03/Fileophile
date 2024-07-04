@@ -105,7 +105,7 @@ function Page() {
                 </button>
 
                 <div className="flex text-sm text-center items-center justify-center gap-2 w-full">
-                  <div className="font-light  ">Don't have an account?</div>
+                  <div className="font-light  ">Don&apos;t have an account?</div>
                   <Link href="/signup">
                     <div className="font-medium  hover:underline ">Sign up</div>
                   </Link>

@@ -267,7 +267,7 @@ export default function Upload() {
           </>
         )}
         <div className={`mt-4 text-[#a09a9a] ${showupload ? "hidden" : ""}`}>
-          Please don't refresh your browser while uploading
+          Please don&apos;t refresh your browser while uploading
         </div>
         <div
           onClick={stopUploads}
