@@ -2,8 +2,7 @@
 import Image from "next/image";
 import menu from "../../public/menuw.png";
 import cross from "../../public/crossw.png";
-
-import { Cookie, Archivo_Black } from "next/font/google";
+import { Cookie } from "next/font/google";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
 
