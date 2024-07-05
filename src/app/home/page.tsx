@@ -1,15 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Cards from "./components/Cards";
 import { useUserContext } from "@/context/userContext";
 import Loading from "../loading";
+import { useSession } from "next-auth/react";
+import { Cookie } from "next/font/google";
+import Loadinghome from "./components/Loadinghome";
 
+const cookie = Cookie({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 export default function Page() {
   const router = useRouter();
   const { user } = useUserContext();
   const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     if (user) {
       setLoading(false);
@@ -17,7 +24,7 @@ export default function Page() {
   }, [user]);
 
   if (loading) {
-    return <Loading />;
+    return <Loadinghome/>
   }
 
   return (

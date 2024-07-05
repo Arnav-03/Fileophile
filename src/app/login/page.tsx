@@ -7,12 +7,8 @@ import Loading from "../loading";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useUserContext } from "@/context/userContext";
+import { SignIn } from "@/components/sign-in";
 
-const metadata: Metadata = {
-  title: "Login | Fileophile",
-  description:
-    "The easiest way to share files and create collaborative workspaces",
-};
 
 const cookie = Cookie({
   subsets: ["latin"],
@@ -23,13 +19,6 @@ function Page() {
   const router = useRouter();
   const { setUser,user} = useUserContext();
 
-
-  const [usercredentials, setuser] = useState({
-    email: "",
-    password: "",
-  });
-
-
   useEffect(() => {
     
     if(user){
@@ -37,6 +26,14 @@ function Page() {
     }
   
   }, [user])
+
+  const [usercredentials, setuser] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, seterror] = useState("")
+
+
   
 
   const onlogin = async () => {
@@ -44,6 +41,10 @@ function Page() {
       console.log("clicked");
       const response = await axios.post("/api/users/login", usercredentials);
       console.log(response.data.message);
+      if(response.data.message==="sign with google"){
+        seterror("Use Google to Login cause your email was registered using google");
+        return;
+      }
       if(response.data.user){
         setUser(response.data.user);
       }
@@ -97,12 +98,8 @@ function Page() {
                 >
                   Login
                 </button>
-                <button
-                  type="button"
-                  className="login-with-google-btn w-full outline-none"
-                >
-                  Sign in with Google
-                </button>
+                <SignIn />
+
 
                 <div className="flex text-sm text-center items-center justify-center gap-2 w-full">
                   <div className="font-light  ">Don&apos;t have an account?</div>
@@ -110,6 +107,8 @@ function Page() {
                     <div className="font-medium  hover:underline ">Sign up</div>
                   </Link>
                 </div>
+                <div className="text-white font-bold text-center">{error}</div>
+            
               </div>
             </div>
           </div>

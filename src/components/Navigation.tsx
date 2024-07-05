@@ -5,6 +5,7 @@ import cross from "../../public/crossw.png";
 import { Cookie } from "next/font/google";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
+import { signIn, useSession,signOut as nextAuthSignOut } from "next-auth/react";
 
 // Call and assign font loaders to a const at the module scope
 const cookie = Cookie({
@@ -51,7 +52,7 @@ function Navigation() {
 
   return (
     <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-[#d10000] text-white z-10 ">
-      <div className={`${cookie.className}  text-5xl h-[50px] ml-2`}>
+      <div  className={`${cookie.className}  text-5xl h-[50px] ml-2`}>
         Fileophile
       </div>
       <div className=" hidden md:flex">
