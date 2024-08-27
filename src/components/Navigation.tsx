@@ -19,8 +19,8 @@ const linksbeforelogin = [
 
 const linksafterlogin = [
   { name: "Share Files", link: "/sharefile" },
-  { name: "Collaboration", link: "/sharefile" },
-  { name: "Profile", link: "/profile" },
+/*   { name: "Collaboration", link: "/sharefile" },
+  { name: "Profile", link: "/profile" }, */
   { name: "logout", link: "/logout" },
 ];
 type LinkItem = {
