@@ -19,7 +19,7 @@ const linksbeforelogin = [
 
 const linksafterlogin = [
   { name: "Share Files", link: "/sharefile" },
-  { name: "Collaboration", link: "/collaboration" },
+  { name: "Collaboration", link: "/sharefile" },
   { name: "Profile", link: "/profile" },
   { name: "logout", link: "/logout" },
 ];
@@ -51,7 +51,7 @@ function Navigation() {
   const [loggedIn, setloggedIn] = useState(true);
 
   return (
-    <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-[#d10000] text-white z-10 ">
+    <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-gradient-to-r from-red-600 to-pink-600 text-white z-10 ">
       <div  className={`${cookie.className}  text-5xl h-[50px] ml-2`}>
         Fileophile
       </div>

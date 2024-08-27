@@ -7,7 +7,7 @@ const cookie = Cookie({
 });
 export default function NotFound() {
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-[#c5242a]">
+    <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-red-600 to-pink-600">
       <section className="text-white">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">

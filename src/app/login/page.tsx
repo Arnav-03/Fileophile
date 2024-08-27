@@ -55,7 +55,7 @@ function Page() {
     }
   };
   return (
-    <div className="flex bg-[#c5242a] items-center justify-center flex-col h-screen">
+    <div className="flex bg-gradient-to-r from-red-600 to-pink-600 items-center justify-center flex-col h-screen">
       <div className={`${cookie.className} text-white text-8xl `}>
         Fileophile
       </div>
