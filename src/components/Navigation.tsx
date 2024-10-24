@@ -1,100 +1,124 @@
 "use client";
-import Image from "next/image";
-import menu from "../../public/menuw.png";
-import cross from "../../public/crossw.png";
-import { Cookie } from "next/font/google";
-import { useState } from "react";
-import {useRouter} from "next/navigation";
-import { signIn, useSession,signOut as nextAuthSignOut } from "next-auth/react";
 
-// Call and assign font loaders to a const at the module scope
+import * as React from "react";
+import { Cookie } from "next/font/google";
+import { useRouter } from "next/navigation";
+import { signIn, useSession, signOut as nextAuthSignOut } from "next-auth/react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Menu, House, Info, CircleDollarSign, Share2, LogOut } from "lucide-react";
+
 const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
+
 const linksbeforelogin = [
-  { name: "Sign up", link: "/signup" },
-  { name: "Login", link: "/login" },
+  { name: "Home", link: "/", icon: House },
+  { name: "About", link: "/about", icon: Info },
+  { name: "Pricing", link: "/pricing", icon: CircleDollarSign },
 ];
 
 const linksafterlogin = [
-  { name: "Share Files", link: "/sharefile" },
-/*   { name: "Collaboration", link: "/sharefile" },
-  { name: "Profile", link: "/profile" }, */
-  { name: "logout", link: "/logout" },
+  { name: "Share Files", link: "/sharefile", icon: Share2 },
+  { name: "logout", link: "/logout", icon: LogOut },
 ];
+
 type LinkItem = {
   name: string;
   link: string;
-};
-type LinkListProps = {
-  links: LinkItem[];
+  icon: React.ElementType;
 };
 
+export default function Navigation() {
+  const router = useRouter();
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
-function Navigation() {
-  const router =useRouter();
-
-  const LinkList: React.FC<LinkListProps> = ({ links }) => (
-    <ul className="w-full text-center">
-      {links.map((item, index) => (
-        <li onClick={()=>router.push(item.link)}
-          className="border-b-[1px] text-xl text-black border-[#dfdddd] m-2 p-3 px-5 cursor-pointer"
-          key={index}
+  const NavigationList = ({ links }: { links: LinkItem[] }) => (
+    <div className="flex items-center gap-4 capitalize">
+      {links.map((item) => (
+        <Button
+          key={item.name}
+          variant="ghost"
+          className="text-white  hover:text-white hover:bg-white/20 text-lg flex items-center gap-3 h-12 px-4"
+          onClick={() => router.push(item.link)}
         >
+          {item.icon && <item.icon className="h-10 w-10" />}
           {item.name}
-        </li>
+        </Button>
       ))}
-    </ul>
+    </div>
   );
-  const [menuopen, setMenuopen] = useState(false);
-  const [loggedIn, setloggedIn] = useState(true);
+
+  const MobileNavigationList = ({ links }: { links: LinkItem[] }) => (
+    <div className="flex flex-col gap-2">
+      {links.map((item) => (
+        <Button
+          key={item.name}
+          variant="ghost"
+          className="w-full justify-start gap-3 h-12 px-4"
+          onClick={() => router.push(item.link)}
+        >
+          {item.icon && <item.icon className="h-7 w-7" />}
+          {item.name}
+        </Button>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="flex fixed top-0 items-center justify-between p-2 w-full bg-gradient-to-r from-red-600 to-pink-600 text-white z-10 ">
-      <div  className={`${cookie.className}  text-5xl h-[50px] ml-2`}>
-        Fileophile
-      </div>
-      <div className=" hidden md:flex">
-        <ul className="flex text-xl mr-2 items-center">
-          {loggedIn ? (
-            <div className="flex gap-[30px]">
-              {linksafterlogin.map((item, index) => (
-                <li onClick={()=>router.push(item.link)} key={index}>{item.name}</li>
-              ))}
-            </div>
-          ) : (
-            <div className="flex cursor-pointer gap-[30px]">
-             {linksbeforelogin.map((item, index) => (
-                <li key={index}>{item.name}</li>
-              ))}
-            </div>
-          )}
-        </ul>
-      </div>
-      <div
-        onClick={() => {
-          setMenuopen((prev) => !prev);
-        }}
-        className="md:hidden  cursor-pointer mr-1"
-      >
-        <Image src={menuopen ? cross : menu} alt="menu" height="45" />
-      </div>
-      <div
-        className={`${
-          menuopen ? "" : "hidden"
-        } md:hidden flex fixed top-[70px] right-[10px] p-1 bg-white rounded-xl h-fit flex-col `}
-      >
-        <div className="">
-          {loggedIn ? (
-            <LinkList links={linksafterlogin} />
-          ) : (
-            <LinkList links={linksbeforelogin} />
-          )}
+    <div className="fixed top-0 w-full z-50 bg-gradient-to-r from-red-900 via-red-600 to-black px-6">
+      <div className="container flex h-20 items-center justify-between">
+        {/* Logo */}
+        <div
+          className={`${cookie.className} text-5xl text-white cursor-pointer`}
+          onClick={() => router.push("/")}
+        >
+          Fileophile
         </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex">
+          <NavigationList links={loggedIn ? linksafterlogin : linksbeforelogin} />
+        </div>
+        
+        <Button className="bg-gradient-to-r from-red-900 via-red-600 to-red-900 px-4 py-2 text-white rounded-md h-12">
+          Get Started
+        </Button>
+
+        {/* Mobile Navigation */}
+        <Sheet>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon" className="text-white">
+              <Menu className="h-7 w-7" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4">
+              <MobileNavigationList
+                links={loggedIn ? linksafterlogin : linksbeforelogin}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );
 }
-
-export default Navigation;

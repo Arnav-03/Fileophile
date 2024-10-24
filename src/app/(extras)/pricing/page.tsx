@@ -2,11 +2,7 @@
 
 import React from 'react';
 import {
-  Users,
-  FileText,
-  Share2,
-  Shield,
-  ArrowRight,
+
   File,
   FileJson,
   FileImage,
@@ -15,15 +11,10 @@ import {
   FileCode,
   FileArchive,
   Check,
-  Star,
-  Clock,
-  Lock,
 } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from '@/components/Navigation';
-import { useRouter } from 'next/navigation';
 
 interface Position {
   x: number;
@@ -55,11 +46,7 @@ const FileIcon: React.FC<FileIconProps> = ({ IconComponent, delay, duration, ini
   );
 };
 
-interface Feature {
-  icon: React.ComponentType<any>;
-  title: string;
-  description: string;
-}
+
 
 interface PricingTier {
   name: string;
@@ -142,28 +129,6 @@ const AnimatedBackground: React.FC = () => {
   );
 };
 
-const features: Feature[] = [
-  {
-    icon: FileText,
-    title: "File Management",
-    description: "Organize and access your files from anywhere, anytime."
-  },
-  {
-    icon: Share2,
-    title: "Easy Sharing",
-    description: "Share files and folders with anyone, with just a few clicks."
-  },
-  {
-    icon: Users,
-    title: "Collaboration",
-    description: "Work together in real-time with your team members."
-  },
-  {
-    icon: Shield,
-    title: "Security",
-    description: "Enterprise-grade security to protect your sensitive data."
-  },
-];
 
 const pricingTiers: PricingTier[] = [
   {
@@ -206,85 +171,48 @@ const pricingTiers: PricingTier[] = [
   }
 ];
 
-const StatsSection: React.FC = () => (
-  <section className="py-20 bg-black/30">
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
-        {[
-          { number: "1M+", label: "Active Users" },
-          { number: "100TB+", label: "Files Stored" },
-          { number: "99.9%", label: "Uptime" }
-        ].map((stat, index) => (
-          <div key={index} className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-2">{stat.number}</div>
-            <div className="text-gray-300">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
 
-export default function HomePage() {
-  const router = useRouter();
+
+export default function Pricing() {
   
   return (
     <div className="relative min-h-screen bg-gradient-to-r from-red-900 via-red-600 to-black text-white overflow-hidden">
       <AnimatedBackground />
       <Navigation />
-      
-      <main className="relative z-10">
-        <section className="min-h-[70vh] flex flex-col items-center justify-center max-w-[1200px] mx-auto text-center px-4 pt-20">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Effortlessly Share Files
-            <br />
-            <span className="text-primary-foreground">
-              and Collaborate Anywhere
-            </span>
-          </h1>
-          
-          <p className="mt-6 max-w-[750px] text-lg md:text-xl text-gray-200">
-            The secure platform for teams to share files via links, store them, 
-            and collaborate on projects seamlessly.
-          </p>
-         
-          <Button 
-            size="lg" 
-            className="mt-8 bg-white text-black hover:bg-gray-200"
-            onClick={() => router.push('/login')}
-          >
-            Get Started <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </section>
-
-
-        <section className="py-20 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1200px] mx-auto">
-            {features.map((feature, index) => (
-              <Card 
-                key={index} 
-                className="bg-white/10 backdrop-blur-sm border-none text-white hover:bg-white/15 transition-colors"
-              >
-                <CardContent className="p-6">
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="rounded-full bg-white/20 p-4">
-                      {React.createElement(feature.icon, {
-                        className: "h-6 w-6 text-white"
-                      })}
+             <section className="py-20 px-4 bg-black/30">
+          <div className="max-w-[1200px] mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Choose Your Plan</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {pricingTiers.map((tier, index) => (
+                <Card 
+                  key={index}
+                  className={`backdrop-blur-sm border-none text-white ${
+                    tier.highlighted 
+                      ? 'bg-white/20 scale-105 transform' 
+                      : 'bg-white/10'
+                  }`}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex flex-col space-y-4">
+                      <h3 className="text-2xl font-bold">{tier.name}</h3>
+                      <div className="text-3xl font-bold">{tier.price}</div>
+                      <p className="text-gray-300">{tier.description}</p>
+                      <ul className="space-y-3">
+                        {tier.features.map((feature, featureIndex) => (
+                          <li key={featureIndex} className="flex items-center">
+                            <Check className="h-5 w-5 text-green-400 mr-2" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                     
                     </div>
-                    <h3 className="text-xl font-semibold">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm text-gray-200">
-                      {feature.description}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
-      </main>
     </div>
   );
 }
