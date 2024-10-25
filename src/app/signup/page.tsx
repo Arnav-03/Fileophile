@@ -1,21 +1,27 @@
 "use client";
-import { Cookie } from "next/font/google";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import React, { useState } from "react";
-import { SignIn } from "@/components/sign-in";
-import { useEffect } from "react";
-import axios from "axios";
+import { Cookie } from "next/font/google";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { useUserContext } from "@/context/userContext";
+import { SignIn } from "@/components/sign-in";
+import {Mail, Lock, User } from 'lucide-react';
+import AnimatedBackground from "@/components/AnimatedBackground";
+import Navigation from "@/components/Navigation";
 
 const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
 
+
 function Page() {
   const router = useRouter();
   const { setUser, user } = useUserContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
   useEffect(() => {
     if (user) {
       router.push("/home");
@@ -27,94 +33,109 @@ function Page() {
     password: "",
     username: "",
   });
+
   const saveToContextAndCookie = (email: string, username: string) => {
     const user = { email, username };
     setUser(user);
   };
+
   const onsignup = async () => {
     try {
+      setIsLoading(true);
+      setError("");
       saveToContextAndCookie(usercredentials.email, usercredentials.username);
       const response = await axios.post("/api/users/signup", usercredentials);
       console.log("signup successful", response.data);
       router.push("/login");
     } catch (error: any) {
       console.log("signup failed ", error);
+      setError(error.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex bg-gradient-to-r from-red-600 to-pink-600 items-center justify-center flex-col h-screen">
-      <div className={`${cookie.className} text-white text-8xl `}>
-        Fileophile
-      </div>
-      <section className="text-white m-2">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  lg:py-0">
-          <div className="w-full  rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight  md:text-2xl ">
-                Create an account
-              </h1>
-              <div className="space-y-4 md:space-y-6">
-                <div>
-                  <input
-                    type="text"
-                    name="username"
-                    value={usercredentials.username}
-                    onChange={(e) =>
-                      setuser({ ...usercredentials, username: e.target.value })
-                    }
-                    id="username"
-                    className="border text-sm rounded block w-full p-2.5 text-black outline-none"
-                    placeholder="Username"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={usercredentials.email}
-                    onChange={(e) =>
-                      setuser({ ...usercredentials, email: e.target.value })
-                    }
-                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
-                    placeholder="Email"
-                  />
-                </div>
-                <div>
-                  <input
-                    value={usercredentials.password}
-                    onChange={(e) =>
-                      setuser({ ...usercredentials, password: e.target.value })
-                    }
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
-                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
-                  />
-                </div>
+    <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-r from-red-900 via-red-600 to-black">
+      <Navigation/>
+      <AnimatedBackground />
+      
+      <div className="relative z-10 w-full max-w-md px-6 py-12 mt-[50px]">
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-8 shadow-2xl">
+          <h2 className="text-xl font-semibold text-white mb-6">
+            Create your account
+          </h2>
 
-                <button
-                  onClick={onsignup}
-                  className="bg-[#610404] w-full text-[#ffffff] font-medium rounded text-lg px-5 py-2 text-center"
-                >
-                  Sign Up
-                </button>
+          <div className="space-y-6">
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+              <input
+                type="text"
+                value={usercredentials.username}
+                onChange={(e) => setuser({ ...usercredentials, username: e.target.value })}
+                className="w-full bg-white/10 text-white border-0 rounded-lg py-3 px-12 outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-white/40"
+                placeholder="Username"
+              />
+            </div>
+
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+              <input
+                type="email"
+                value={usercredentials.email}
+                onChange={(e) => setuser({ ...usercredentials, email: e.target.value })}
+                className="w-full bg-white/10 text-white border-0 rounded-lg py-3 px-12 outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-white/40"
+                placeholder="Email"
+              />
+            </div>
+
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+              <input
+                type="password"
+                value={usercredentials.password}
+                onChange={(e) => setuser({ ...usercredentials, password: e.target.value })}
+                className="w-full bg-white/10 text-white border-0 rounded-lg py-3 px-12 outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-white/40"
+                placeholder="Password"
+              />
+            </div>
+
+            <button
+              onClick={onsignup}
+              disabled={isLoading}
+              className="w-full bg-red-700 hover:bg-red-600 text-white rounded-lg py-3 font-medium transition-colors disabled:opacity-50"
+            >
+              {isLoading ? "Creating account..." : "Sign Up"}
+            </button>
+
+            {error && (
+              <div className="text-center text-sm text-red-300 bg-red-900/20 py-2 px-4 rounded-lg">
+                {error}
               </div>
+            )}
 
+            <div className="relative py-3">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/20"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-transparent px-4 text-sm text-white z-10">or</span>
+              </div>
+            </div>
+
+            <div className="mt-4">
               <SignIn />
+            </div>
 
-              <div className="flex text-sm justify-center gap-2 w-full">
-                <div className="font-light">Already have an account?</div>
-                <Link href="/login">
-                  <div className="font-medium hover:underline">Login</div>
-                </Link>
-              </div>
+            <div className="mt-6 text-center text-white/60 text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="text-white hover:underline font-medium">
+                Sign in
+              </Link>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

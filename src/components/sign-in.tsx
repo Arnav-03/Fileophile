@@ -25,7 +25,7 @@ export function SignIn() {
   return (
     <>
        <form onSubmit={handleSignIn}>
-          <button className="login-with-google-btn w-full" type="submit"> Google</button>
+          <button className="login-with-google-btn w-full" type="submit">Continue with Google</button>
         </form>
     </>
   );

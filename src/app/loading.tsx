@@ -12,5 +12,5 @@ const cookie = Cookie({
 
 export default function Loading() {
 
-  return <p className={`${cookie.className} bg-gradient-to-r from-red-600 to-pink-600 text-5xl h-screen m-auto text-center flex items-center justify-center `}>Loading...</p>
+  return <p className={`${cookie.className} bg-gradient-to-r from-red-900 via-red-600 to-black text-5xl h-screen m-auto text-center flex items-center justify-center  text-white`}>Loading...</p>
 }

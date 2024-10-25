@@ -7,23 +7,13 @@ import {
   Share2,
   Shield,
   ArrowRight,
-  File,
-  FileJson,
-  FileImage,
-  FileVideo,
-  FileAudio,
-  FileCode,
-  FileArchive,
-  Check,
-  Star,
-  Clock,
-  Lock,
 } from 'lucide-react';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from '@/components/Navigation';
 import { useRouter } from 'next/navigation';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 interface Position {
   x: number;
@@ -61,86 +51,7 @@ interface Feature {
   description: string;
 }
 
-interface PricingTier {
-  name: string;
-  price: string;
-  description: string;
-  features: string[];
-  highlighted?: boolean;
-}
 
-const AnimatedBackground: React.FC = () => {
-  const fileIcons = [
-    File,
-    FileJson,
-    FileImage,
-    FileVideo,
-    FileAudio,
-    FileCode,
-    FileArchive,
-  ];
-
-  const icons = React.useMemo(() => {
-    return Array.from({ length: 24 }).map(() => ({
-      IconComponent: fileIcons[Math.floor(Math.random() * fileIcons.length)],
-      delay: Math.random() * 5,
-      duration: 15 + Math.random() * 15,
-      initialPos: {
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-      },
-    }));
-  }, []);
-
-  return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
-      <svg className="absolute inset-0 w-full h-full">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <line
-            key={i}
-            className="animate-line"
-            stroke="rgba(255,255,255,0.05)"
-            strokeWidth="1"
-            strokeDasharray="5,5"
-            style={{
-              animation: `moveLine ${20 + i * 5}s linear infinite`,
-              animationDelay: `${i * 2}s`,
-            }}
-          >
-            <animate
-              attributeName="x1"
-              values="0;100;0"
-              dur={`${20 + i * 5}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y1"
-              values={`${i * 10};${(i + 5) * 10};${i * 10}`}
-              dur={`${20 + i * 5}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="x2"
-              values="100;0;100"
-              dur={`${20 + i * 5}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y2"
-              values={`${(i + 5) * 10};${i * 10};${(i + 5) * 10}`}
-              dur={`${20 + i * 5}s`}
-              repeatCount="indefinite"
-            />
-          </line>
-        ))}
-      </svg>
-
-      {icons.map((props, index) => (
-        <FileIcon key={index} {...props} />
-      ))}
-    </div>
-  );
-};
 
 const features: Feature[] = [
   {
@@ -165,65 +76,6 @@ const features: Feature[] = [
   },
 ];
 
-const pricingTiers: PricingTier[] = [
-  {
-    name: "Basic",
-    price: "Free",
-    description: "Perfect for individuals",
-    features: [
-      "5GB Storage",
-      "Basic File Sharing",
-      "2 Team Members",
-      "Email Support"
-    ]
-  },
-  {
-    name: "Pro",
-    price: "$9.99/mo",
-    description: "Great for small teams",
-    highlighted: true,
-    features: [
-      "50GB Storage",
-      "Advanced Sharing",
-      "Unlimited Team Members",
-      "Priority Support",
-      "File Version History",
-      "Custom Branding"
-    ]
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "For large organizations",
-    features: [
-      "Unlimited Storage",
-      "Enterprise Security",
-      "Admin Controls",
-      "24/7 Support",
-      "API Access",
-      "Custom Integration"
-    ]
-  }
-];
-
-const StatsSection: React.FC = () => (
-  <section className="py-20 bg-black/30">
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
-        {[
-          { number: "1M+", label: "Active Users" },
-          { number: "100TB+", label: "Files Stored" },
-          { number: "99.9%", label: "Uptime" }
-        ].map((stat, index) => (
-          <div key={index} className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-2">{stat.number}</div>
-            <div className="text-gray-300">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
 
 export default function HomePage() {
   const router = useRouter();

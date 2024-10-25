@@ -65,7 +65,7 @@ export default function Navigation() {
   );
 
   const MobileNavigationList = ({ links }: { links: LinkItem[] }) => (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 ">
       {links.map((item) => (
         <Button
           key={item.name}
@@ -96,22 +96,22 @@ export default function Navigation() {
           <NavigationList links={loggedIn ? linksafterlogin : linksbeforelogin} />
         </div>
         
-        <Button className="bg-gradient-to-r from-red-900 via-red-600 to-red-900 px-4 py-2 text-white rounded-md h-12">
+        <Button  onClick={() => router.push('/login')} className="bg-gradient-to-r from-red-900 via-red-600 to-red-900 px-4 py-2 text-white rounded-md h-12">
           Get Started
         </Button>
 
         {/* Mobile Navigation */}
         <Sheet>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" className="text-white">
-              <Menu className="h-7 w-7" />
+            <Button  size="icon" className="text-white ">
+              <Menu className="h-12 w-12" />
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="bg-gradient-to-r from-red-900 via-red-600 to-black text-white">
             <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
+              <SheetTitle className="text-white" >Menu</SheetTitle>
             </SheetHeader>
-            <div className="mt-4">
+            <div className="mt-4 ">
               <MobileNavigationList
                 links={loggedIn ? linksafterlogin : linksbeforelogin}
               />

@@ -1,119 +1,123 @@
 "use client";
-import { Metadata } from "next";
-import { Cookie } from "next/font/google";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Loading from "../loading";
+import Link from "next/link";
+import { Cookie } from "next/font/google";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useUserContext } from "@/context/userContext";
 import { SignIn } from "@/components/sign-in";
-
+import { Mail, Lock } from 'lucide-react';
+import AnimatedBackground from "@/components/AnimatedBackground";
+import Navigation from "@/components/Navigation";
 
 const cookie = Cookie({
   subsets: ["latin"],
   weight: ["400"],
 });
 
+
 function Page() {
   const router = useRouter();
-  const { setUser,user} = useUserContext();
-
-  useEffect(() => {
-    
-    if(user){
-      router.push('/home');
-    }
-  
-  }, [user])
-
+  const { setUser, user } = useUserContext();
   const [usercredentials, setuser] = useState({
     email: "",
     password: "",
   });
-  const [error, seterror] = useState("")
+  const [error, seterror] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-
-  
+  useEffect(() => {
+    if (user) {
+      router.push('/home');
+    }
+  }, [user]);
 
   const onlogin = async () => {
     try {
-      console.log("clicked");
+      setIsLoading(true);
       const response = await axios.post("/api/users/login", usercredentials);
-      console.log(response.data.message);
-      if(response.data.message==="sign with google"){
-        seterror("Use Google to Login cause your email was registered using google");
+      if (response.data.message === "sign with google") {
+        seterror("Please use Google Sign In as your email was registered using Google");
         return;
       }
-      if(response.data.user){
+      if (response.data.user) {
         setUser(response.data.user);
       }
       router.push("/home");
     } catch (error: any) {
       console.log("login failed ", error);
+      seterror("Invalid credentials. Please try again.");
     } finally {
+      setIsLoading(false);
     }
   };
+
   return (
-    <div className="flex bg-gradient-to-r from-red-600 to-pink-600 items-center justify-center flex-col h-screen">
-      <div className={`${cookie.className} text-white text-8xl `}>
-        Fileophile
-      </div>
-      <section className="text-white m-2">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  lg:py-0">
-          <div className="w-full  rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <div className="space-y-4 md:space-y-6 m-4  ">
-                <div>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={usercredentials.email}
-                    onChange={(e) =>
-                      setuser({ ...usercredentials, email: e.target.value })
-                    }
-                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
-                    placeholder="Email"
-                  />
-                </div>
-                <div>
-                  <input
-                    value={usercredentials.password}
-                    onChange={(e) =>
-                      setuser({ ...usercredentials, password: e.target.value })
-                    }
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
-                    className="border text-black text-sm rounded block w-full p-2.5 outline-none"
-                  />
-                </div>
+    <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-r from-red-900 via-red-600 to-black">
+      <Navigation/>
+      <AnimatedBackground />
+      
+      <div className="relative z-10 w-full max-w-md px-6 py-12 mt-[50px]">
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl p-8 shadow-2xl">
+          <div className="space-y-6">
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+              <input
+                type="email"
+                value={usercredentials.email}
+                onChange={(e) => setuser({ ...usercredentials, email: e.target.value })}
+                className="w-full bg-white/10 text-white border-0 rounded-lg py-3 px-12 outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-white/40"
+                placeholder="Email"
+              />
+            </div>
 
-                <button
-                  onClick={onlogin}
-                  type="submit"
-                  className="bg-[#610404] w-full text-[#ffffff] font-medium rounded text-lg px-5 py-2 text-center "
-                >
-                  Login
-                </button>
-                <SignIn />
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5" />
+              <input
+                type="password"
+                value={usercredentials.password}
+                onChange={(e) => setuser({ ...usercredentials, password: e.target.value })}
+                className="w-full bg-white/10 text-white border-0 rounded-lg py-3 px-12 outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-white/40"
+                placeholder="Password"
+              />
+            </div>
 
+            <button
+              onClick={onlogin}
+              disabled={isLoading}
+              className="w-full bg-red-700 hover:bg-red-600 text-white rounded-lg py-3 font-medium transition-colors disabled:opacity-50"
+            >
+              {isLoading ? "Signing in..." : "Sign In"}
+            </button>
 
-                <div className="flex text-sm text-center items-center justify-center gap-2 w-full">
-                  <div className="font-light  ">Don&apos;t have an account?</div>
-                  <Link href="/signup">
-                    <div className="font-medium  hover:underline ">Sign up</div>
-                  </Link>
-                </div>
-                <div className="text-white font-bold text-center">{error}</div>
-            
+            <div className="relative py-3">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/20"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-transparent px-4 text-sm text-white z-10">or</span>
               </div>
             </div>
+
+            <div className="mt-4">
+              <SignIn />
+            </div>
+          </div>
+
+          {error && (
+            <div className="mt-4 text-center text-sm text-red-300 bg-red-900/20 py-2 px-4 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          <div className="mt-8 text-center text-white/60 text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="text-white hover:underline font-medium">
+              Sign up
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
