@@ -9,7 +9,7 @@ interface CardsProps {
 
 const Cards: React.FC<CardsProps> = ({ title, description,navigate }) => {
   return (
-    <div className="max-w-sm p-6 md:p-10 border-[2px] m-4 md:m-8 border-[#c5242a] rounded-2xl card cursor-pointer">
+    <div className="max-w-sm p-6 md:p-10  m-4 md:m-8  rounded-2xl card cursor-pointer bg-white/10 backdrop-blur-sm border-none text-white hover:bg-white/15 transition-colors ">
       <h5 className="mb-2 text-2xl md:text-4xl font-bold tracking-tight">{title}</h5>
       <p className="mb-3 text-lg ">{description}</p>
       <Link

@@ -18,7 +18,7 @@ function Loadinghome() {
   return (
     <div>
       <p
-        className={`${cookie.className} text-white bg-[#c5242a] text-5xl h-screen m-auto text-center flex items-center justify-center `}
+        className={`${cookie.className} text-white bg-gradient-to-r from-red-900 via-red-600 to-black text-5xl h-screen m-auto text-center flex items-center justify-center `}
       >
         Loading...
       </p>
