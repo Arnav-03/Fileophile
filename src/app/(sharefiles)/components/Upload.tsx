@@ -201,13 +201,12 @@ export default function Upload() {
 
   return (
     <div
-      className={` bg-gradient-to-r from-red-900 via-red-600 to-black flex flex-col items-center w-full p-4 text-[#ffffff] relative `}
+      className={`bg-transparent  flex flex-col items-center w-full p-4 text-[#ffffff] fixed bottom-0 ${files.length === 0 ? "hidden" : ""}`}
     >
-
       <Dialog>
       <DialogTrigger asChild>
         {showupload && (
-          <Button variant="destructive" className="mt-4">
+          <Button variant="destructive" size="lg" className="mt-4 bg-gradient-to-r from-red-900 via-red-600 to-red-900">
             Upload
           </Button>
         )}
