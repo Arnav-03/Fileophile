@@ -15,7 +15,12 @@ import { useUserContext } from "@/context/userContext";
 import eyeopen from "../../../../public/eyeopen.png";
 import eyeclosed from "../../../../public/eyeclosed.png";
 import Image from "next/image";
-import { link } from "fs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 export default function Upload() {
   const { files } = useFileContext();
   const { user } = useUserContext();
@@ -194,57 +199,63 @@ export default function Upload() {
   };
   const [confirmpassword, setConfirmpassword] = useState(false);
 
- 
   return (
     <div
-      className={` bg-gradient-to-r from-red-900 via-red-600 to-black flex flex-col items-center w-full p-4 text-[#ffffff] relative ${
-        files.length === 0 ? "hidden" : ""
-      }`}
+      className={` bg-gradient-to-r from-red-900 via-red-600 to-black flex flex-col items-center w-full p-4 text-[#ffffff] relative `}
     >
-      <div
-        className={`${
-          showupload ? "" : "hidden"
-        } flex flex-col items-center justify-center text-center`}
-      >
-        <div
-          onClick={uploadFiles}
-          className={` bg-[#ce0202] p-3 mt-[-10px] rounded cursor-pointer  w-fit  z-10 ${
-            showupload ? "" : "hidden"
-          }`}
-        >
-          Upload
-        </div>
-        <div className="flex flex-col items-center justify-center ">
-          <div className="flex p-2 border-black border-2 text-md justify-between rounded-lg m-1 max-w-[200px]">
-            <input
-              className="text-black   outline-none  overflow-hidden bg-inherit "
-              onChange={(e) => setpassword(e.target.value)}
-              type={`${showpassword ? "text" : "password"}`}
-              placeholder="password (optional)"
-              name="password"
-              id="password"
-            />
-            <Image
-              className=""
-              onClick={togglePasswordVisibility}
-              src={showpassword ? eyeclosed : eyeopen}
-              height={25}
-              alt="Password visibility toggle"
-            />
-          </div>
 
-          <div
-            onClick={() => setConfirmpassword((prev) => !prev)}
-            className={`"text-white text-sm ${
-              !confirmpassword ? "bg-blue-500" : "bg-red-600"
-            } w-fit p-2 rounded capitalize cursor-pointer ${
-              password.length > 0 ? "" : "opacity-0"
-            }`}
-          >
-            {confirmpassword ? "remove password" : "set password"}
+      <Dialog>
+      <DialogTrigger asChild>
+        {showupload && (
+          <Button variant="destructive" className="mt-4">
+            Upload
+          </Button>
+        )}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Set Password (Optional)</DialogTitle>
+          <DialogDescription>
+            Add a password to protect your uploaded files.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showpassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+              >
+                {showpassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
+          {password.length > 0 && (
+            <Button
+              variant={confirmpassword ? "destructive" : "secondary"}
+              onClick={() => setConfirmpassword(!confirmpassword)}
+            >
+              {confirmpassword ? "Remove Password" : "Set Password"}
+            </Button>
+          )}
         </div>
-      </div>
+        <Button onClick={uploadFiles} className="w-full">
+          Upload Files
+        </Button>
+      </DialogContent>
+    </Dialog>
+
+      
 
       <div
         className={`w-full ${
