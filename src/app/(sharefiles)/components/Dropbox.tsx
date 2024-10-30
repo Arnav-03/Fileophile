@@ -55,14 +55,14 @@ function Dropbox() {
   };
 
   return (
-    <div className="flex items-center flex-col justify-center m-3 lg:m-4 mb-0 h-fit">
+    <div className="flex items-center flex-col justify-center m-3 lg:m-4 mb-0 h-fit ">
       <label
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-[400px] border-2 border-red-600 border-dashed rounded-lg cursor-pointer bg-[#f1f1f1]"
+        className="flex flex-col items-center justify-center w-full h-[400px] border-dashed rounded-lg cursor-pointer ] bg-white/40 border-none text-white hover:bg-white/50 transition-colors"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+        <div className="flex flex-col items-center justify-center pt-5 pb-6 ">
           <svg
             className="w-10 h-10 lg:w-16 lg:h-16 mb-4 text-red-600"
             aria-hidden="true"
@@ -78,8 +78,8 @@ function Dropbox() {
               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
             />
           </svg>
-          <p className="mb-2 text-md lg:text-xl text-red-600">
-            <span className="font-extrabold">Click to upload</span> or drag and
+          <p className="mb-2 text-md lg:text-xl ">
+            <span className="font-extrabold text-red-600">Click to upload</span> or drag and
             drop
           </p>
         </div>

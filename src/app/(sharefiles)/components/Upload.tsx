@@ -197,7 +197,7 @@ export default function Upload() {
  
   return (
     <div
-      className={` flex flex-col items-center w-full p-4 text-[#ffffff] relative ${
+      className={` bg-gradient-to-r from-red-900 via-red-600 to-black flex flex-col items-center w-full p-4 text-[#ffffff] relative ${
         files.length === 0 ? "hidden" : ""
       }`}
     >
@@ -217,7 +217,7 @@ export default function Upload() {
         <div className="flex flex-col items-center justify-center ">
           <div className="flex p-2 border-black border-2 text-md justify-between rounded-lg m-1 max-w-[200px]">
             <input
-              className="text-black   outline-none  overflow-hidden "
+              className="text-black   outline-none  overflow-hidden bg-inherit "
               onChange={(e) => setpassword(e.target.value)}
               type={`${showpassword ? "text" : "password"}`}
               placeholder="password (optional)"
