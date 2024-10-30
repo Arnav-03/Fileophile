@@ -1,194 +1,200 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useFileContext } from "@/context/fileContext";
-import { getFirestore } from "firebase/firestore";
-import { app } from "@/FirebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+'use client'
 
-import photo from "../../../../public/photo.png";
-import music from "../../../../public/music1.png";
-import pdf from "../../../../public/pdf.png";
-import movie from "../../../../public/movie.png";
-import apk from "../../../../public/apk.png";
-import ppt from "../../../../public/ppt.png";
-import txt from "../../../../public/txt.png";
-import undefinedFIle from "../../../../public/undefinedFIle.png";
-import xlsx from "../../../../public/xlsx.png";
-import csv from "../../../../public/csv.png";
-import doc1 from "../../../../public/doc.png";
-import Link from "next/link";
-import { Cookie } from "next/font/google";
-import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { getFirestore, collection, getDocs } from "firebase/firestore"
+import { app } from "@/FirebaseConfig"
+import { useFileContext } from "@/context/fileContext"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Image,
+  Music,
+  FileText,
+  Video,
+ Package,
+  Presentation,
+   FileSpreadsheet, 
+   File
+} from "lucide-react"
 
-const cookie = Cookie({
-subsets: ["latin"],
-weight: ["400"],
-});
 interface FileDocument {
-fileName: string;
-fileSize: number;
-fileType: string;
-fileUrl: string;
-shortUrl: string;
+  fileName: string
+  fileSize: number
+  fileType: string
+  fileUrl: string
+  shortUrl: string
 }
 
-function Page() {
-    const searchParams = useSearchParams();
-    const [user, setUser] = useState<string>("");
-    const [folder, setFolder] = useState<string>("");
-
-    useEffect(() => {
-    const userParam = searchParams.get('user');
-    const folderParam = searchParams.get('folder');
-
-    if (userParam !== null) {
-        setUser(userParam);
-    }
-    if (folderParam !== null) {
-        setFolder(folderParam);
-    }
-    }, [searchParams]);
-    
-
-    
-
-const { files, removeFile } = useFileContext();
-const db = getFirestore(app);
-const [documents, setDocuments] = useState<FileDocument[]>([]);
-
 const getFileIcon = (filename: string) => {
-    const extension = filename.split(".").pop()?.toLowerCase();
-    switch (extension) {
+  const extension = filename.split(".").pop()?.toLowerCase()
+  switch (extension) {
     case "jpg":
-    case "jpeg":
-    case "png":
-    case "gif":
-        return photo;
-    case "mp3":
-    case "wav":
-    case "m4a":
-        return music;
-    case "pdf":
-        return pdf;
-    case "mp4":
-    case "mkv":
-        return movie;
-    case "apk":
-        return apk;
-    case "ppt":
-    case "pptx":
-        return ppt;
-    case "txt":
-        return txt;
-    case "xlsx":
-    case "xls":
-        return xlsx;
-    case "doc":
-    case "docx":
-        return doc1;
-    case "csv":
-        return csv;
-    default:
-        return undefinedFIle;
-    }
-};
+      case "jpeg":
+      case "png":
+      case "gif":
+        return <Image className="w-6 h-6 text-blue-500" />;
+      case "mp3":
+      case "wav":
+      case "m4a":
+        return <Music className="w-6 h-6 text-purple-500" />;
+      case "pdf":
+        return <FileText className="w-6 h-6 text-red-500" />;
+      case "mp4":
+      case "mkv":
+        return <Video className="w-6 h-6 text-green-500" />;
+      case "apk":
+        return <Package className="w-6 h-6 text-orange-500" />;
+      case "ppt":
+      case "pptx":
+        return <Presentation className="w-6 h-6 text-amber-500" />;
+      case "txt":
+        return <FileText className="w-6 h-6 text-gray-500" />;
+      case "xlsx":
+      case "xls":
+      case "csv":
+        return <FileSpreadsheet className="w-6 h-6 text-emerald-500" />;
+      case "doc":
+      case "docx":
+        return <FileText className="w-6 h-6 text-blue-600" />;
+      default:
+        return <File className="w-6 h-6 text-gray-400" />;
+  }
+}
 
-const getDocumentsFromFirebase = async () => {
-    try {
-    const querySnapshot = await getDocs(
-        collection(
-        db,
-        "fileophile",
-        user,
-       folder
-        )
-    );
-      let documentsData: FileDocument[] = [];
-      querySnapshot.forEach((doc) => {
-        // Type assertion to FileDocument
-        const documentData = {
-          fileName: doc.data().fileName,
-          fileSize: doc.data().fileSize,
-          fileType: doc.data().fileType,
-          fileUrl: doc.data().fileUrl,
-          shortUrl: doc.data().shortUrl,
-        } as FileDocument;
+const formatFileSize = (bytes: number): string => {
+  if (bytes >= 1024 * 1024) {
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB"
+  } else {
+    return (bytes / 1024).toFixed(2) + " KB"
+  }
+}
 
-        documentsData.push(documentData);
-      });
-      setDocuments(documentsData);
-    } catch (error) {
-      console.error("Error fetching documents:", error);
-    }
-  };
+export default function Page() {
+  const searchParams = useSearchParams()
+  const [user, setUser] = useState<string>("")
+  const [folder, setFolder] = useState<string>("")
+  const [documents, setDocuments] = useState<FileDocument[]>([])
+  const [loading, setLoading] = useState(true)
+  const { files, removeFile } = useFileContext()
+  const db = getFirestore(app)
+
+  useEffect(() => {
+    const userParam = searchParams.get('user')
+    const folderParam = searchParams.get('folder')
+
+    if (userParam) setUser(userParam)
+    if (folderParam) setFolder(folderParam)
+  }, [searchParams])
 
   useEffect(() => {
     if (user && folder) {
-      getDocumentsFromFirebase();
+      getDocumentsFromFirebase()
     }
-  }, [user, folder]);
+  }, [user, folder])
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes >= 1024 * 1024) {
-      return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-    } else {
-      return (bytes / 1024).toFixed(2) + " KB";
+  const getDocumentsFromFirebase = async () => {
+    try {
+      setLoading(true)
+      const querySnapshot = await getDocs(
+        collection(db, "fileophile", user, folder)
+      )
+      const documentsData: FileDocument[] = querySnapshot.docs.map(doc => ({
+        fileName: doc.data().fileName,
+        fileSize: doc.data().fileSize,
+        fileType: doc.data().fileType,
+        fileUrl: doc.data().fileUrl,
+        shortUrl: doc.data().shortUrl,
+      }))
+      setDocuments(documentsData)
+    } catch (error) {
+      console.error("Error fetching documents:", error)
+    } finally {
+      setLoading(false)
     }
-  };
-  const fileTrim = (filename: string | any[]) => {
-    const trimmedName =
-      filename.length > 26 ? `${filename.slice(0, 26)}...` : filename;
-    return trimmedName;
-  };
+  }
+  const truncateFilename = (filename: string, maxLength = 23) => {
+  if (filename.length > maxLength) {
+    return filename.slice(0, maxLength - 3) + "...";
+  }
+  return filename;
+};
+
   return (
-    <div className=" flex items-center justify-center flex-col">
-      <div className="text-2xl m-1">Files Shared</div>
-      <div className="flex gap-2">
-        {documents.length === 0 && (
-          <div
-            className={`${cookie.className} text-4xl flex  m-4 p-4 items-center justify-between`}
-          >
-            Loading...
-          </div>
-        )}
-        {documents.length > 0 && (
-          <ul className="flex flex-col h-fit max-h-[345px] overflow-scroll border-2  border-[#817a7a] rounded-lg ">
-            {documents.map((doc) => (
-              <li
-                className="flex border-b-[1px] border-[#cac0c0] m-1 p-1 items-center justify-between"
-                key={doc.fileName}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Image
-                      src={getFileIcon(doc.fileName)}
-                      alt={doc.fileName}
-                      height={40}
-                    />
-                  </div>
-                  <div className="">
-                    <div className="">{fileTrim(doc.fileName)}</div>
-                    <div className="text-xs text-gray-500">
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          Files Shared
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="text-center py-8">Loading...</div>
+        ) : documents.length === 0 ? (
+          <div className="text-center py-8">No files shared yet.</div>
+        ) : (
+          <ScrollArea className="h-fit w-full rounded-md border">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[50px] sm:w-[50px] md:w-[70px] lg:w-[70px]">
+                    Type
+                  </TableHead>
+                  <TableHead className="sm:pl-4 md:pl-6 lg:pl-6">
+                    File Name
+                  </TableHead>
+                  <TableHead className="hidden sm:table-cell sm:w-[100px] md:w-[120px] lg:w-[120px]">
+                    Size
+                  </TableHead>
+                  <TableHead className="text-right sm:w-[80px] md:w-[100px] lg:w-[100px]">
+                    Action
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {documents.map((doc) => (
+                  <TableRow key={doc.fileName}>
+                    <TableCell className="sm:pl-0">
+                      {getFileIcon(doc.fileName)}
+                    </TableCell>
+                    <TableCell className="font-medium sm:pl-4 md:pl-6 lg:pl-6">
+                      {truncateFilename(doc.fileName)}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       {formatFileSize(doc.fileSize)}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Link target="blank" href={doc.fileUrl}>
-                    <div className="bg-blue-500 ml-2 text-white text-sm p-1 rounded">
-                      Open File
-                    </div>
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ul>
+                    </TableCell>
+                    <TableCell className="text-right sm:pr-0">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="w-full sm:w-auto"
+                      >
+                        <a
+                          href={doc.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open File
+                        </a>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
-
-export default Page;
